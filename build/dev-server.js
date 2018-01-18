@@ -66,7 +66,7 @@ app.use(devMiddleware)
 
 // r_这里可能是静态资源
 const staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-app.use(staticPath, express.static('./static/bishe-vue-newaaaaaaaaaaaaaaaaaaaaa'))
+app.use(staticPath, express.static('./static')) // r_本来是./static
 
 const uri = 'http://localhost:' + port
 
