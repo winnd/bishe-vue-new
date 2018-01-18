@@ -9,9 +9,9 @@ module.exports = {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'bishe-vue-new/static/bishe-vue-new/bishe-vue-new', // r_原来是static
+    assetsSubDirectory: './bishe-vue-new/static/bishe-vue-new/bishe-vue-new', // r_原来是static
     assetsPublicPath: './bishe-vue-new/bishe-vue-new/bishe-vue-new',
-    productionSourceMap: true,    // r_原来是true
+    productionSourceMap: false,    // r_原来是true
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
@@ -28,8 +28,8 @@ module.exports = {
     env: require('./dev.env'),
     port: process.env.PORT || 8081,
     autoOpenBrowser: true,
-    assetsSubDirectory: 'static',
-    assetsPublicPath: './',
+    assetsSubDirectory: './adsfadsf/static', // r_原来是 static
+    assetsPublicPath: './ddddd',     // r_原来是 ./
     // proxyTable: {}, // 这是原来的
     proxyTable: {
       '/authentication': {    // 获取身份
@@ -37,13 +37,13 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: {}
       },
-      '/oss':{
-        target:'https://developer.api.autodesk.com',
+      '/oss': {
+        target: 'https://developer.api.autodesk.com',
         changeOrigin: true,
         pathRewrite: {}
       },
-      '/modelderivative':{
-        target:'https://developer.api.autodesk.com',
+      '/modelderivative': {
+        target: 'https://developer.api.autodesk.com',
         changeOrigin: true,
         pathRewrite: {}
       },
