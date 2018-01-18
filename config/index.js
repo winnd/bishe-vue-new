@@ -29,7 +29,7 @@ module.exports = {
     port: process.env.PORT || 8081,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
     // proxyTable: {}, // 这是原来的
     proxyTable: {
       '/authentication': {    // 获取身份
