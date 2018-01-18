@@ -29,4 +29,4 @@ branches:
 env:
  global:
    # 我将其添加到了travis-ci的环境变量中
-   - GH_REF: github.com/winnd/bishe-vue-new.git
+   - GH_REF: https://github.com/winnd/bishe-vue-new.git
