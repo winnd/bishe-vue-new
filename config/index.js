@@ -28,8 +28,8 @@ module.exports = {
     env: require('./dev.env'),
     port: process.env.PORT || 8081,
     autoOpenBrowser: true,
-    assetsSubDirectory: './adsfadsf/static', // r_原来是 static
-    assetsPublicPath: './ddddd',     // r_原来是 ./
+    assetsSubDirectory: '/static', // r_原来是 static
+    assetsPublicPath: './',     // r_原来是 ./
     // proxyTable: {}, // 这是原来的
     proxyTable: {
       '/authentication': {    // 获取身份
