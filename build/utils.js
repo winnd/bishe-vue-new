@@ -38,8 +38,8 @@ exports.cssLoaders = function (options) {
     if (options.extract) {
       return ExtractTextPlugin.extract({
         use: loaders,
-        fallback: 'vue-style-loader',
-        publicPath: '../../../a/'            // 强制指向根目录
+        fallback: 'vue-style-loader'
+        // publicPath: '../../../a/'            // 强制指向根目录
       })
     } else {
       return ['vue-style-loader'].concat(loaders)
