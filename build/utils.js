@@ -39,7 +39,7 @@ exports.cssLoaders = function (options) {
       return ExtractTextPlugin.extract({
         use: loaders,
         fallback: 'vue-style-loader',
-        publicPath: '../../'            // 强制指向根目录
+        publicPath: '../../../a/'            // 强制指向根目录
       })
     } else {
       return ['vue-style-loader'].concat(loaders)

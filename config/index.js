@@ -9,7 +9,7 @@ module.exports = {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),             // r_所有静态资产的根目录
-    assetsSubDirectory: '../static',                 // r_  path/to/dist/static 静态资产子路径
+    assetsSubDirectory: './static',                 // r_  path/to/dist/static 静态资产子路径
     assetsPublicPath: '.',                                 // r_这个是通过http服务器运行的url路径 原来是.
     productionSourceMap: true,                                  // 在构建生产环境版本时是否开启source map。
     // Gzip off by default as many popular static hosts such as
