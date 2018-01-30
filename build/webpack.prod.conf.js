@@ -21,9 +21,9 @@ const webpackConfig = merge(baseWebpackConfig, {
   },
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
-    path: config.build.assetsRoot,
-    filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    path: config.build.assetsRoot,                                // 编译输出目录
+    filename: utils.assetsPath('js/[name].[chunkhash].js'),       // 编译输出文件名格式
+    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')     // 没有指定输出名的文件输出的文件名格式
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -52,7 +52,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: config.build.index,
+      filename: config.build.index,   // 生成html文件的名字，路径和生产环境下的不同，要与修改后的publickPath相结合，否则开启服务器后页面空白
       template: 'index.html',
       inject: true,
       minify: {

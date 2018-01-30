@@ -13,9 +13,9 @@ module.exports = {
     app: './src/main.js'
   },
   output: {
-    path: config.build.assetsRoot,
+    path: config.build.assetsRoot,                          // webpack输出的目标文件夹路径（例如：/dist）
     filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'
+    publicPath: process.env.NODE_ENV === 'production'       // webpack编译输出的发布路径(判断是正式环境或者开发环境等)
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },

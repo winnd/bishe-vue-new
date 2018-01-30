@@ -30,8 +30,6 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(Carousel)
 Vue.use(CarouselItem)
-// Vue.use(Tabs)
-// Vue.use(TabPane)
 
 router.beforeEach((to, from, next) => {
   if (to.query.token && to.query.JobType) {

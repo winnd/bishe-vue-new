@@ -170,6 +170,8 @@
     computed: {
       getTypeName(){
         if (this.relicTypeList.length !== 0) {
+          var a = {a: 1, b: 2}
+          _.has(a, 'a')
           return _.find(this.relicTypeList, ['id', this.currentType]).relicType
         }
       }

@@ -8,10 +8,10 @@ module.exports = {
   build: {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: './bishe-vue-new/static', // r_原来是static
-    assetsPublicPath: './', // r_原来是./
-    productionSourceMap: false,    // r_原来是true
+    assetsRoot: path.resolve(__dirname, '../dist'),   // r_所有静态资产的根目录
+    assetsSubDirectory: 'static', // r_  path/to/dist/static 静态资产子路径
+    assetsPublicPath: './', // r_这个是通过http服务器运行的url路径
+    productionSourceMap: true,    // 在构建生产环境版本时是否开启source map。
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
