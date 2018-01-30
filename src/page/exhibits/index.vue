@@ -195,7 +195,7 @@
         text-align: right
         flex: 0 120px
         width: 100%
-        background url("/static/img/header_bg.jpg")
+        background url("/img/header_bg.jpg")
         background-size: 100%;
         overflow: hidden
         .option-box
