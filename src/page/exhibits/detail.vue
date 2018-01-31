@@ -266,7 +266,7 @@
       filter: blur(5px);
       position: absolute;
       background-size: 103%;
-      background-image url("/static/img/detail-out-bg.jpg")
+      background-image url("~static/img/detail-out-bg.jpg")
       transform: scale(1.01);
     .r-header
       z-index: 5
@@ -283,7 +283,7 @@
           bottom: 0;
           left: 0;
           right: 0;
-          background-image url("/static/img/detail-out-bg.jpg")
+          background-image url("~static/img/detail-out-bg.jpg")
           filter: blur(7px);
           background-size 103%
           transform: scale(1.01);
@@ -338,7 +338,7 @@
         position: relative
         overflow: hidden
         max-width 1000px
-        background: url("/static/img/detail-bg.png") no-repeat
+        background: url("~static/img/detail-bg.png") no-repeat
         background-size 100%
         > li
           width 100%

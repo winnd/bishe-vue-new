@@ -6,7 +6,7 @@
         <div class="login-box-body">
           <p>请输入用户名密码</p>
           <div class="input-box">
-            <el-input placeholder="用户名" suffix-icon="el-icon-message" v-model="loginForm.username" value="1"></el-input>
+            <el-input placeholder="用户名" suffix-icon="el-icon-message" v-model="loginForm.username" value="admin"></el-input>
           </div>
           <div class="input-box">
             <el-input placeholder="密码" type="password" suffix-icon="el-icon-edit" v-model="loginForm.password"
