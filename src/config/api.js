@@ -12,7 +12,7 @@ export default {
   api_req(url, method = 'POST', params, success, failure, logicErr){
     axios({
       method: method,
-      url: url,
+      url: HOST + url,
       data: JSON.stringify(params),
       headers: {
         'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ export default {
   api_base(url, method = 'POST', params, success, failure, signs){
     axios({
       method: method,
-      url: url,
+      url: HOST + url,
       data: JSON.stringify(params),
       headers: {
         'Content-Type': 'application/json'
