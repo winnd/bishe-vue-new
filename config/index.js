@@ -9,14 +9,14 @@ module.exports = {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),             // r_所有静态资产的根目录
-    assetsSubDirectory: './static',                 // r_  path/to/dist/static 静态资产子路径
-    assetsPublicPath: '.',                                 // r_这个是通过http服务器运行的url路径 原来是.
+    assetsSubDirectory: 'static',                           // r_  path/to/dist/static 静态资产子路径 原版是static
+    assetsPublicPath: './',                                 // r_这个是通过http服务器运行的url路径 原来是.
     productionSourceMap: true,                                  // 在构建生产环境版本时是否开启source map。
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
     // npm install --save-dev compression-webpack-plugin
-    productionGzip: false,
+    productionGzip: true,
     productionGzipExtensions: ['js', 'css'],
     // Run the build command with an extra argument to
     // View the bundle analyzer report after build finishes:
@@ -28,8 +28,8 @@ module.exports = {
     env: require('./dev.env'),
     port: process.env.PORT || 8081,
     autoOpenBrowser: true,
-    assetsSubDirectory: '/static', // r_原来是 static
-    assetsPublicPath: './',     // r_原来是 ./
+    assetsSubDirectory: 'static', // r_原来是 static
+    assetsPublicPath: '/',     // r_原来是 /
     // proxyTable: {}, // 这是原来的
     proxyTable: {
       '/authentication': {    // 获取身份

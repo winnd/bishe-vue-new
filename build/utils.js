@@ -28,7 +28,8 @@ exports.cssLoaders = function (options) {
       loaders.push({
         loader: loader + '-loader',
         options: Object.assign({}, loaderOptions, {
-          sourceMap: options.sourceMap
+          sourceMap: options.sourceMap,
+          publicPath: path.resolve(__dirname) + 'static'            // 使url(static/img/header_bg.4b1ef65.jpg) 变 url(static/a/header_bg.4b1ef65.jpg)
         })
       })
     }
@@ -39,7 +40,6 @@ exports.cssLoaders = function (options) {
       return ExtractTextPlugin.extract({
         use: loaders,
         fallback: 'vue-style-loader'
-        // publicPath: '../../../a/'            // 强制指向根目录
       })
     } else {
       return ['vue-style-loader'].concat(loaders)

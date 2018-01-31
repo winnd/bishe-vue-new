@@ -135,7 +135,7 @@
     width: 100%
     min-width 1060px
     .r-logo
-      background: url(/static/img/header_bg.jpg)
+      background: url("~static/img/header_bg.jpg")
       background-size: 100%
       background-position: 0px -22px
       padding: 0

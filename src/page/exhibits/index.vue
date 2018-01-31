@@ -87,7 +87,7 @@
 <script>
   import _ from 'lodash'
   const PAGE_SIZE = 10
-  const initImg = '/static/img/sidebar-bg1.jpg'
+  const initImg = '~static/img/sidebar-bg1.jpg'
 
   export default {
     created(){
@@ -195,7 +195,7 @@
         text-align: right
         flex: 0 120px
         width: 100%
-        background url("/img/header_bg.jpg")
+        background url("~static/img/header_bg.jpg")
         background-size: 100%;
         overflow: hidden
         .option-box
@@ -268,7 +268,7 @@
           .el-tabs__nav-scroll
             display: flex
             align-items center
-            background-image url("/static/img/sidebar-tab-bg2.jpg")
+            background-image url("~static/img/sidebar-tab-bg2.jpg")
             background-size auto 100%
             /*单个导航菜单item*/
             .el-tabs__item
@@ -286,7 +286,7 @@
                   font-size: 14px
                   width: 200px
                 i
-                  background url("/static/img/icon_ear.png")
+                  background url("~static/img/icon_ear.png")
                   display: inline-block;
                   vertical-align: middle;
                   width: 22px;
@@ -298,7 +298,7 @@
                   background-position right top
               &.is-active
                 i
-                  background url("/static/img/icon_ear_active.png")
+                  background url("~static/img/icon_ear_active.png")
         /*导航菜单-内容*/
         .el-tabs__content
           height: 100%
@@ -320,7 +320,7 @@
               padding-left: 5px
               color: #fff
               line-height 33px
-              background: url("/static/img/title_bg.jpg") no-repeat
+              background: url("~static/img/title_bg.jpg") no-repeat
               background-size 100%
             .r-side
               flex: 1

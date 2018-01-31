@@ -64,9 +64,9 @@ app.use(devMiddleware)
 
 // serve pure static assets
 
-// r_这里可能是静态资源
+// r_这里可能是css中的静态资源 (开发环境
 const staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-app.use(staticPath, express.static('./static/vuesaaa')) // r_本来是./static
+app.use(staticPath, express.static('./static')) // r_本来是./static
 
 const uri = 'http://localhost:' + port
 

@@ -24,6 +24,7 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      'static': resolve('static'),//增加这一行代码
     }
   },
   module: {
@@ -49,11 +50,12 @@ module.exports = {
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: 'url-loader?limit=8192&name=imagesbbb/[name].[hash:7].[ext]'/*,
+        loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('img/[name].[hash:7].[ext]')
-        }*/
+          name: '[name].[ext]',
+          publicPath: 'static/img/'
+        }
       },
       {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,

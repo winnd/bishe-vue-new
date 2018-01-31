@@ -60,8 +60,6 @@
 </script>
 
 <style>
-  @import "/static/css/style.min.css";
-
   .view-wrapper {
     display: flex;
     height: 100%;
