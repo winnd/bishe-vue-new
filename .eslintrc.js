@@ -27,6 +27,9 @@ module.exports = {
     'space-before-blocks': 0,
     'no-unused-vars': 0,
     'no-eval': 0,
-    'no-undef': 0
+    'no-undef': 0,
+    'key-spacing':0,
+    'no-multi-spaces':0,
+    'block-spacing':0
   }
 }

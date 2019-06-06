@@ -87,7 +87,7 @@
 <script>
   export default {
     created(){
-      this.$api.api_req('museum-api/relic-type/resources', 'GET', {}, (_data) => { this.typeData = _data.data }, this.failure)
+      this.$api.api_req('relicType/select/all', 'GET', {}, (_data) => { this.typeData = _data.data }, this.failure)
       // 获取权限列表
       this.$api.api_req('museum-api/user/user-auth/id/' + localStorage.getItem('userId'), 'GET', {}, this.getInitAuthList, this.failure, this.logicErr)
     },

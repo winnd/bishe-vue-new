@@ -56,7 +56,7 @@
   export default {
     created(){
       // 获取用户列表
-      this.$api.api_req('museum-api/user/all-users', 'GET', {}, (_data) => { this.userData = _data.data }, this.failure)
+      this.$api.api_req('user/select/all', 'GET', {}, (_data) => { this.userData = _data.data }, this.failure)
       // 获取全部权限列表
       this.$api.api_req('museum-api/user/auth-menu', 'GET', {}, this.initAuthLists, this.failure)
       // 获取当前用户的权限列表

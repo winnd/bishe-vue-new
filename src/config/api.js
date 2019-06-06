@@ -2,7 +2,8 @@ import axios from 'axios'
 // require('es6-promise').polyfill()
 
 // const HOST = 'localhost:8080/'  // 本地端口
-const HOST = 'http://115.29.140.80:8080/'
+// const HOST = 'http://115.29.140.80:8080/'
+const HOST = 'http://localhost:8082/'
 const FORGE_HOST = 'https://developer.api.autodesk.com/'
 
 export default {
@@ -16,13 +17,14 @@ export default {
       data: JSON.stringify(params),
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
         'authorization': localStorage.getItem('token')
       },
-      withCredentials: true,
+      // withCredentials: true,
       crossDomain: true
     }).then(res => {
       if (success) {
-        if (res.data.status === '200') {
+        if (res.data.status.toString() === '0') {
           success(res.data)
         } else if (logicErr) {
           logicErr(res.data.message)
@@ -42,7 +44,7 @@ export default {
       headers: {
         'Content-Type': 'application/json'
       },
-      withCredentials: true,
+      // withCredentials: true,
       crossDomain: true
     }).then(res => {
       if (success) {

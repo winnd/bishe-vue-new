@@ -122,9 +122,9 @@
   export default {
     created(){
       // 获取展品
-      this.$api.api_req('museum-api/relic/resources', 'POST', {pageNum: 1, pageSize: 5}, this.getInitDataSuc, this.failure)
+      this.$api.api_req('relic/select/all', 'GET', {pageNum: 1, pageSize: 5}, this.getInitDataSuc, this.failure)
       // 获取展品种类
-      this.$api.api_req('museum-api/relic-type/resources', 'GET', {}, (_data) => { this.relicTypes = _data.data }, this.failure)
+      this.$api.api_req('relicType/select/all', 'GET', {}, (_data) => { this.relicTypes = _data.data }, this.failure)
       // 获取权限列表
       this.$api.api_req('museum-api/user/user-auth/id/' + localStorage.getItem('userId'), 'GET', {}, this.getInitAuthList, this.failure, this.logicErr)
     },

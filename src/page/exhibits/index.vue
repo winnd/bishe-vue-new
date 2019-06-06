@@ -30,7 +30,7 @@
       </div>
 
       <el-tabs tab-position="right" @input="handleClick" style="min-height: 460px">
-        <el-tab-pane v-for="(item,index) in relicTypeList" key="index">
+        <el-tab-pane v-for="(item) in relicTypeList">
           <!--标签-->
           <span slot="label" class="regress">
               <i class="i1"></i>{{item.relicType}}<i class="i2"></i>
@@ -44,7 +44,7 @@
                 <h3>
                   <ul class="item-box">
                     <li v-for="(item,index) in relicList" class="show-item" @click="jumpToPage('/detail?type='+currentType+'&index='+(index+(currentPage-1)*10))">
-                      <img :src=$HOST+item.picUrl>
+                      <img :src=$HOST+item.picUrl alt="">
                       <h4 class="name">{{item.name}}</h4>
                     </li>
                     <template v-if="relicList.length < 10" v-for="i in 10-relicList.length">
@@ -65,9 +65,9 @@
       <div class="left">
         <h3>友情链接</h3>
         <ul class="link-box">
-          <li v-for="(item,index) in linkList">
+          <li v-for="(item) in linkList">
             <a :href=item.url target="_blank">
-              <img :src=item.image>
+              <img :src=item.image alt="">
               <span>{{item.name}}</span>
             </a>
           </li>
@@ -91,16 +91,55 @@
 
   export default {
     created(){
+      debugger
+      console.log('主页')
       // 查询藏品分类
-      this.$api.api_req('museum-api/relic-type/resources', 'GET', {}, (_data) => { this.relicTypeList = _data.data.reverse() }, this.failure)
+      this.$api.api_req('relicType/select/all', 'GET', {}, (_data) => { this.relicTypeList = _data.data.reverse() }, this.failure)
       // 查询藏品
-      this.$api.api_req('museum-api/relic/resources', 'POST', {pageNum: this.currentPage, pageSize: PAGE_SIZE, relicType: this.currentType}, this.initData, this.failure)
+      this.$api.api_req('relic/select/all', 'GET', {pageNum: this.currentPage, pageSize: PAGE_SIZE, relicType: this.currentType}, this.initData, this.failure)
       // 查询友链
-      this.$api.api_req('museum-api/friendship-link/resources', 'POST', {pageSize: 100, pageNum: 1}, (_data) => { this.linkList = _data.data }, this.failure)
+      this.$api.api_req('friendShipLink/select/all', 'GET', {pageSize: 100, pageNum: 1}, (_data) => { this.linkList = _data.data }, this.failure)
     },
     data(){
       return {
-        relicTypeList: [],        // 藏品种类
+        relicTypeList: [
+          {
+            'id': 1,
+            'relicType': '铜器',
+            'createBy': 1,
+            'createTime': '2019-05-09T00:35:06.000+0000',
+            'updateBy': 1,
+            'updateTime': '2019-05-09T00:35:20.000+0000',
+            'img': 'tongqi.jpg'
+          },
+          {
+            'id': 2,
+            'relicType': '玉器',
+            'createBy': 1,
+            'createTime': '2019-05-09T00:35:10.000+0000',
+            'updateBy': 1,
+            'updateTime': '2019-05-09T00:35:21.000+0000',
+            'img': 'yuqi.jpg'
+          },
+          {
+            'id': 3,
+            'relicType': '铁器',
+            'createBy': 1,
+            'createTime': '2019-05-09T00:35:12.000+0000',
+            'updateBy': 1,
+            'updateTime': '2019-05-09T00:35:22.000+0000',
+            'img': 'tieqi.jpg'
+          },
+          {
+            'id': 4,
+            'relicType': '陶器',
+            'createBy': 1,
+            'createTime': '2019-05-09T00:35:13.000+0000',
+            'updateBy': 1,
+            'updateTime': '2019-05-09T00:35:22.000+0000',
+            'img': 'taoqi.jpg'
+          }
+        ],        // 藏品种类
         relicList: [],           // 当前展示数据
         linkList: [],            // 友链
         currentType: 1,          // 当前种类
@@ -114,9 +153,11 @@
     methods: {
       // 初始获取
       initData(_data){
+        debugger
         this.relicList = []
         this.relicList = _data.data
-        this.pages = _data.page.pages === 0 ? 1 : _data.page.pages
+        // this.pages = _data.page.pages === 0 ? 1 : _data.page.pages
+        this.pages = 1
       },
       // 选择展品第几页
       choicePage(val, oldVal){
@@ -127,13 +168,14 @@
       handleClick(val){
         if (this.relicTypeList.length !== 0) {
           this.currentType = this.relicTypeList[val].id
-          this.currentTypeImg = this.$HOST + this.relicTypeList[val].img
+          // this.currentTypeImg = this.$HOST + this.relicTypeList[val].img
+          this.currentTypeImg = 'https://www.baidu.com/img/bd_logo1.png?where=super'
           this.selectRelic()
         }
       },
       // 刷新页面数据
       selectRelic(){
-        this.$api.api_req('museum-api/relic/resources', 'POST', {pageNum: this.currentPage, pageSize: PAGE_SIZE, relicType: this.currentType}, this.initData, this.failure)
+        this.$api.api_req('relic/select/relicType/' + this.currentType, 'GET', {pageNum: this.currentPage, pageSize: PAGE_SIZE, relicType: this.currentType}, this.initData, this.failure)
       },
       jumpToPage(url){
         this.$router.push({path: url})
@@ -260,7 +302,7 @@
         flex 1
         /*导航菜单-导航条*/
         .el-tabs__header
-          margin-left: 0px
+          margin-left: 0
           display: flex
           .el-tabs__nav-wrap
             &::after

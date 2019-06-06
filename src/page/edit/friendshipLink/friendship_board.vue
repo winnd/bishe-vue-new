@@ -74,7 +74,7 @@
   export default {
     created(){
       // 查询友链
-      this.$api.api_req('museum-api/friendship-link/resources', 'POST', {pageSize: 100, pageNum: 1}, (_data) => { this.linkList = _data.data }, this.failure)
+      this.$api.api_req('friendShipLink/select/all', 'GET', {pageSize: 100, pageNum: 1}, (_data) => { this.linkList = _data.data }, this.failure)
       // 获取权限列表
       this.$api.api_req('museum-api/user/user-auth/id/' + localStorage.getItem('userId'), 'GET', {}, this.getInitAuthList, this.failure, this.logicErr)
     },

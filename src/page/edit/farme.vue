@@ -77,6 +77,7 @@
     created(){
       // 登录验证
       if (!localStorage.getItem('isLogin')) {
+        alert('登录失败,请重新登录')
         this.$router.push({'path': '/login'})
       }
     },
