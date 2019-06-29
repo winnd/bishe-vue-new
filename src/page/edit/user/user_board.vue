@@ -1,5 +1,5 @@
 <template>
-  <div class="exhibitType-board-wrapper">
+  <div class="relicType-board-wrapper">
     <div class="r-oneline">
       <el-button @click="addNew" v-if="hasAuth(7)">新增管理人员</el-button>
     </div>
@@ -54,17 +54,17 @@
 
 <script>
   export default {
-    created(){
+    created () {
       // 获取用户列表
-      this.$api.api_req('user/select/all', 'GET', {}, (_data) => { this.userData = _data.data }, this.failure)
+      this.$api.api_req('routerManage/select/all', 'GET', {}, (_data) => { this.userData = _data.data }, this.failure)
       // 获取全部权限列表
-      this.$api.api_req('museum-api/user/auth-menu', 'GET', {}, this.initAuthLists, this.failure)
+      this.$api.api_req('museum-api/routerManage/auth-menu', 'GET', {}, this.initAuthLists, this.failure)
       // 获取当前用户的权限列表
-      this.$api.api_req('museum-api/user/user-auth/id/' + localStorage.getItem('userId'), 'GET', {}, this.getCurrentAuth, this.failure, this.logicErr)
+      this.$api.api_req('museum-api/routerManage/routerManage-auth/id/' + localStorage.getItem('userId'), 'GET', {}, this.getCurrentAuth, this.failure, this.logicErr)
     },
-    data(){
+    data () {
       // 密码验证
-      var validatePass = (rule, value, callback) => {
+      var validatePass  = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'))
         } else {
@@ -85,88 +85,88 @@
         }
       }
       return {
-        userData: [],
-        authList: [],                       // 当前用户权限信息
+        userData       : [],
+        authList       : [],                       // 当前用户权限信息
         choicedAuthList: [],
-        editForm: {
-          id: '',
-          account: '',
-          name: '',
-          password: '',
+        editForm       : {
+          id       : '',
+          account  : '',
+          name     : '',
+          password : '',
           checkPass: ''
         },
-        flag: {
-          showEdit: false,
+        flag           : {
+          showEdit       : false,
           isIndeterminate: false,          // flag 是否选了部分
-          checkAll: false
+          checkAll       : false
         },
-        rules: {
-          account: [
-            {required: true, message: '请输入登录账号', trigger: 'blur'},
-            {min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur'}
+        rules          : {
+          account  : [
+            { required: true, message: '请输入登录账号', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
-          name: [
-            {required: true, message: '请输入用户名', trigger: 'blur'},
-            {min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur'}
+          name     : [
+            { required: true, message: '请输入用户名', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
-          password: [
-            {required: true, validator: validatePass, trigger: 'blur'}
+          password : [
+            { required: true, validator: validatePass, trigger: 'blur' }
           ],
           checkPass: [
-            {required: true, validator: validatePass2, trigger: 'blur'}
+            { required: true, validator: validatePass2, trigger: 'blur' }
           ]
         },
-        rightName: [],                     // 全部权限 名称
-        rights: [],                        // 全部权限 对象
-        rightIndex: [],                    // 选中的权限 索引
-        checkedRight: [],                  // 选中的权限 名称
-        formLabelWidth: '80px'
+        rightName      : [],                     // 全部权限 名称
+        rights         : [],                        // 全部权限 对象
+        rightIndex     : [],                    // 选中的权限 索引
+        checkedRight   : [],                  // 选中的权限 名称
+        formLabelWidth : '80px'
       }
     },
     methods: {
       // 获取全部权限列表回调
-      initAuthLists(data){
-        data.data.menus.map((item, index) => {
-          item.functions.map((item, index) => {
+      initAuthLists (data) {
+        data.data.menus.map((item) => {
+          item.functions.map((item) => {
             this.rightName.push(item.functionName)      // 全部权限 名称
             this.rights.push(item)                      // 全部权限 对象
           })
         })
       },
       // 获取当前用户可操作的权限列表
-      getCurrentAuth(_data){
+      getCurrentAuth (_data) {
         this.authList = []
-        let tempData = Array.from(_data.data)
+        let tempData  = Array.from(_data.data)
         tempData.shift()
         tempData.map(x => {
           this.authList.push(x.funcId)
         })
       },
       // 检查是否全选
-      handleCheckAllChange(val) {
-        this.checkedRight = val ? this.rightName : []   // true : false
+      handleCheckAllChange (val) {
+        this.checkedRight         = val ? this.rightName : []   // true : false
         this.flag.isIndeterminate = false
       },
       // 检查是否选了部分
-      handleCheckedCitiesChange(value) {
-        let checkedCount = value.length
-        this.flag.checkAll = checkedCount === this.rightName.length
+      handleCheckedCitiesChange (value) {
+        let checkedCount          = value.length
+        this.flag.checkAll        = checkedCount === this.rightName.length
         this.flag.isIndeterminate = checkedCount > 0 && checkedCount < this.rightName.length
       },
       // 添加按钮
-      addNew(){
-        this.$router.push({path: '/edit/manage/add'})
+      addNew () {
+        this.$router.push({ path: '/edit/user/add' })
       },
       // 编辑按钮
-      edit(row){
+      edit (row) {
         // 初始化
-        this.flag = {showEdit: true, isIndeterminate: false, checkAll: false}
-        this.editForm = {id: row.id, account: row.account, name: row.name, password: '', checkPass: ''}
+        this.flag            = { showEdit: true, isIndeterminate: false, checkAll: false }
+        this.editForm        = { id: row.id, account: row.account, name: row.name, password: '', checkPass: '' }
         this.choicedAuthList = []
-        this.checkedRight = []
-        this.$api.api_req('museum-api/user/user-auth/id/' + row.id, 'GET', {}, this.getChoicedUserAuth, this.failure, this.logicErr)        // 获取选中的user权限
+        this.checkedRight    = []
+        this.$api.api_req('museum-api/routerManage/routerManage-auth/id/' + row.id, 'GET', {}, this.getChoicedUserAuth, this.failure, this.logicErr)        // 获取选中的user权限
       },
-      getChoicedUserAuth(_data){
+      getChoicedUserAuth (_data) {
         let tempData = Array.from(_data.data)
         console.log(tempData)
         tempData.map(x => {
@@ -175,36 +175,36 @@
             this.checkedRight.push(_.find(this.rights, ['id', x.funcId]).functionName)
           }
         })
-        this.flag.checkAll = this.choicedAuthList.length === this.rightName.length                                                // 是否全选
+        this.flag.checkAll        = this.choicedAuthList.length === this.rightName.length                                                // 是否全选
         this.flag.isIndeterminate = this.choicedAuthList.length > 0 && this.choicedAuthList.length < this.rightName.length        // 是否半选
       },
-      editSubmit(formName){
+      editSubmit (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.rightIndex = this.nameToIndex(this.checkedRight, this.rights, 'id')
-            this.$api.api_req('museum-api/user/management', 'PUT',
-              {account: this.editForm.account, password: btoa(this.editForm.password), name: this.editForm.password, id: this.editForm.id},
+            this.$api.api_req('museum-api/routerManage/management', 'PUT',
+              { account: this.editForm.account, password: btoa(this.editForm.password), name: this.editForm.password, id: this.editForm.id },
               () => {}, this.failure)
-            this.$api.api_req('museum-api/user/user-auth', 'POST', {userId: this.editForm.id, authList: this.rightIndex}, this.editSubmitSuc, this.failure)
+            this.$api.api_req('museum-api/routerManage/routerManage-auth', 'POST', { userId: this.editForm.id, authList: this.rightIndex }, this.editSubmitSuc, this.failure)
           } else {
-            this.$message.error({message: '请检查填写信息是否完整'})
+            this.$message.error({ message: '请检查填写信息是否完整' })
             return false
           }
         })
       },
-      editSubmitSuc(){
-        this.$api.api_req('museum-api/user/all-users', 'GET', {}, (_data) => { this.userData = _data.data }, this.failure)
+      editSubmitSuc () {
+        this.$api.api_req('museum-api/routerManage/all-users', 'GET', {}, (_data) => { this.userData = _data.data }, this.failure)
         this.flag.showEdit = false
         this.$message.success('更新用户成功')
       },
-      deleteItem(row){
-        this.$confirm('删除该用户?', '确认', {confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning'}).then(() => {
-          this.$api.api_req('museum-api/user/management/id/' + row.id, 'DELETE', {}, this.deleteSuc, this.failure)
-          this.$message({type: 'success', message: '删除成功!'})
-        }).catch(() => { this.$message({type: 'info', message: '已取消'}) })
+      deleteItem (row) {
+        this.$confirm('删除该用户?', '确认', { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }).then(() => {
+          this.$api.api_req('museum-api/routerManage/management/id/' + row.id, 'DELETE', {}, this.deleteSuc, this.failure)
+          this.$message({ type: 'success', message: '删除成功!' })
+        }).catch(() => { this.$message({ type: 'info', message: '已取消' }) })
       },
-      deleteSuc(data){
-        this.$api.api_req('museum-api/user/all-users', 'GET', {}, (_data) => { this.userData = _data.data }, this.failure)
+      deleteSuc () {
+        this.$api.api_req('museum-api/routerManage/all-users', 'GET', {}, (_data) => { this.userData = _data.data }, this.failure)
         this.$message.success('删除成功')
       },
       /**
@@ -214,29 +214,27 @@
        * @param target        id
        * @returns {Array}
        */
-      nameToIndex(_nameList, model, target){
+      nameToIndex (_nameList, model, target) {
         let indexList = []
-        _nameList.map((item, index) => {
+        _nameList.map((item) => {
           indexList.push(parseInt(_.find(model, ['functionName', item])[target]))
         })
         return indexList
       },
       // 伪显示密码
-      fakePW(row, column){
-        return '******'
-      },
-      hasAuth(index){
+      fakePW: () => '******',
+      hasAuth (index) {
         return this.authList.indexOf(index) !== -1
       },
       // 格式化时间
-      dateFormat(row, column){
+      dateFormat (row, column) {
         return new Date(row[column.property]).toLocaleString()
       },
-      failure(_err){
+      failure (_err) {
         console.log('交互失败')
         console.log(_err)
       },
-      logicErr(_err){
+      logicErr (_err) {
         this.$message.error(_err)
       }
     }
@@ -250,6 +248,7 @@
       form
         .el-form-item
           width: 50%
+
       td
         &:last-child
           border-right: 0
@@ -257,13 +256,17 @@
   // 添加按钮
   .r-oneline
     margin-bottom: 20px
+
     .add-btn
       float left
+
     .search-form
       float right
       margin-bottom: 0
+
       .el-form-item
         margin-bottom 0
+
     &::after
       content: ''
       display: block

@@ -1,0 +1,44 @@
+① get后台图片的时候加载不到, 浏览器显示net::ERR_UNKNOWN_URL_SCHEME
+
+原因
+  因为地址写成了localhost:8082 需要加上http://
+
+② 在<img :style="'background-image: url(/image/' + currentTypeImg + ')>里写地址出现 GET http://localhost:8083/image/1.jpg 404 (Not Found)
+
+需要在url()中加/api
+改成:style="'background-image: url(/api/image/' + currentTypeImg + ')
+
+③ 改了el-carousel-item 和 el-carousel的源代码
+
+  item里加了prop:
+      pic: {
+        type: String
+      }
+
+  carousel里改了:
+  <button class="el-carousel__button" :style="item.pic?{background:`url(`+item.pic+`)`,backgroundSize:`100%`}:{}"><span v-if="hasLabel">{{ item.label }}</span></button>
+
+
+④ 调试的时候f12显示app.js有几万行
+webpack.prod.conf里devtool设为 #cheap-module-eval-source-map
+
+⑤ 路由老是没有值
+  一层 iframe 只能有一层 /path
+  把路由前的'/'去掉
+  每层有children的对象本身也需要写component    {path:'', component: relicBoard,children : []}
+
+
+⑥ relic_board 导引到 relicType_borad 上去了
+  因为 relic_board 的名字跟 relicType_borad 的文件名都是 show_board
+  后改为 relic_board 和 relicType_borad
+
+⑦ vuex Computed property "relicTypes" was assigned to but it has no setter.
+    有在vuex里写 relicTypes 的定义 但是在业务里没手动使用 motation 给 relicTypes 设值
+
+⑧ Vuex unknown action type relicTypes
+    没有 export default relicTypes
+
+⑨ 关于跨域
+  ① Axios.create 指定 base_url
+  ② proxytable 代理 path 并允许跨域, target指的是要跨到哪个域上去
+

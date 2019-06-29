@@ -76,7 +76,7 @@
       // 查询友链
       this.$api.api_req('friendShipLink/select/all', 'GET', {pageSize: 100, pageNum: 1}, (_data) => { this.linkList = _data.data }, this.failure)
       // 获取权限列表
-      this.$api.api_req('museum-api/user/user-auth/id/' + localStorage.getItem('userId'), 'GET', {}, this.getInitAuthList, this.failure, this.logicErr)
+      this.$api.api_req('museum-api/routerManage/routerManage-auth/id/' + localStorage.getItem('userId'), 'GET', {}, this.getInitAuthList, this.failure, this.logicErr)
     },
     data(){
       return {
@@ -120,7 +120,7 @@
         this.flag.showAdd = false
         this.$api.api_req('museum-api/friendship-link/management', 'POST', this.addForm, this.addSubmitSuc, this.failure)
       },
-      addSubmitSuc(_data){
+      addSubmitSuc(){
         this.$message.success('新增友链成功')
         this.$api.api_req('museum-api/friendship-link/resources', 'POST', {pageSize: 100, pageNum: 1}, (_data) => { this.linkList = _data.data }, this.failure)
       },
@@ -154,7 +154,7 @@
           this.$message({type: 'info', message: '已取消'})
         })
       },
-      deleteSuc(_data){
+      deleteSuc(){
         this.$api.api_req('museum-api/friendship-link/resources', 'POST', {pageSize: 100, pageNum: 1}, (_data) => { this.linkList = _data.data }, this.failure)
         this.$message({type: 'success', message: '删除成功!'})
       },

@@ -1,7 +1,7 @@
 <template>
   <div class='board-wrapper'>
     <div class="r-oneline">
-      <el-button @click="addNew" v-if="hasAuth(3)" class="add-btn">新增展品</el-button>
+      <el-button @click="addNew" v-if="hasPerm('relic_insert')" class="add-btn">新增展品</el-button>
       <el-form :inline="true" :model="formInline" class="search-form">
         <el-form-item>
           <el-input v-model="formInline.str" placeholder="请输入展品id或展品名称"></el-input>
@@ -15,9 +15,10 @@
     <el-table border :data='formData' style='width: 100%' ref='singleTable' class='r-table'>
       <el-table-column type='expand'>
         <template slot-scope='props'>
+
           <el-form label-position='left' inline class='r-table-expand'>
             <el-form-item :style="{width:'100%'}">
-              <img :src=$HOST+props.row.picUrl class="cover-img">
+              <img :src="$HOST+'image/'+props.row.picUrl" class="cover-img" alt="">
             </el-form-item>
             <el-form-item label='藏品名称'>
               <span>{{ props.row.name }}</span>
@@ -26,7 +27,7 @@
               <span>{{ props.row.id }}</span>
             </el-form-item>
             <el-form-item label='类别'>
-              <span>{{ getType(props.row.relicType) }}</span>
+              <span>{{ getType(props.row.relicTypes) }}</span>
             </el-form-item>
             <el-form-item label='馆藏级别'>
               <span>{{ props.row.level }}</span>
@@ -80,8 +81,8 @@
               <span>{{ props.row.requiredTech }}</span>
             </el-form-item>
             <el-form-item label='展示图片' :style="{'width':'100%'}">
-              <template v-for="(item,index) in props.row.images">
-                <img :src="$HOST+item.url" class="cover-img pdt-14px pdr-5px"/>
+              <template v-for="(item) in props.row.relicImages">
+                <img :src="$HOST+'image/'+item.url" class="cover-img pdt-14px pdr-5px" alt="" />
               </template>
             </el-form-item>
           </el-form>
@@ -91,12 +92,12 @@
       <el-table-column property='name' label='展品名称' width='200'></el-table-column>
       <el-table-column property='id' label='编号' width='150'></el-table-column>
       <el-table-column property='level' label='馆藏级别'></el-table-column>
-      <el-table-column property='updateTime' label='添加日期' :formatter="dateFormat" width="200"></el-table-column>
-      <template v-if="hasAuth(2)||hasAuth(3)">
+      <el-table-column property='updateTime' label='添加日期' :formatter="dateFormat"></el-table-column>
+      <template v-if="hasPerm('relic_update')||hasPerm('relic_delete')">
         <el-table-column label='操作' width='100'>
           <template slot-scope='scope'>
-            <el-button @click='edit(scope.row)' type='text' size='small' v-if="hasAuth(2)">编辑</el-button>
-            <el-button @click='deleteItem(scope.row)' type='text' size='small' v-if="hasAuth(3)">删除</el-button>
+            <el-button @click='edit(scope.row)' type='text' size='small' v-if="hasPerm('relic_update')">编辑</el-button>
+            <el-button @click='deleteRelic(scope.row)' type='text' size='small' v-if="hasPerm('relic_delete')">删除</el-button>
           </template>
         </el-table-column>
       </template>
@@ -117,95 +118,84 @@
 </template>
 
 <script>
-  import _ from 'lodash'
+  import { post, get, deleteItem } from '@/units/api'
 
   export default {
-    created(){
-      // 获取展品
-      this.$api.api_req('relic/select/all', 'GET', {pageNum: 1, pageSize: 5}, this.getInitDataSuc, this.failure)
-      // 获取展品种类
-      this.$api.api_req('relicType/select/all', 'GET', {}, (_data) => { this.relicTypes = _data.data }, this.failure)
+    inject : ['refresh'],
+    created () {
+      get('relic/select/allRelic', { pageNum: 1, pageSize: 5 })
+        .then(data => {
+          this.getInitDataSuc(data)
+        })
+
       // 获取权限列表
-      this.$api.api_req('museum-api/user/user-auth/id/' + localStorage.getItem('userId'), 'GET', {}, this.getInitAuthList, this.failure, this.logicErr)
+//      this.$api.api_req('museum-api/routerManage/routerManage-auth/id/' + localStorage.getItem('userId'), 'GET', {}, this.getInitAuthList, this.failure, this.logicErr)
     },
-    data() {
+    data () {
       return {
-        formData: [],
-        relicTypes: [],
-        authList: [],       // 用户权限信息
-        totalData: 0,
+        formData  : [],
+        authList  : [],       // 用户权限信息
+        totalData : 0,
         formInline: {
           str: ''
         }
       }
     },
     methods: {
-      getInitAuthList(_data){
+      getInitAuthList (data) {
+        debugger
         this.authList = []
-        _data.data.map(x => {
+        data.data.map(x => {
           this.authList.push(x.funcId)
         })
         console.log(this.authList)
       },
-      getInitDataSuc(_data){
-        this.formData = _data.data
-        this.totalData = _data.page.totalNum
+      getInitDataSuc (data) {
+        this.formData = data.data
+//        this.totalData = _data.page.totalNum        // todo 页数
       },
-      // 添加按钮
-      addNew(){
-        this.$router.push({path: '/edit/exhibit/add'})
-      },
+      addNew () { this.$router.push({ path: '/edit/relic/add' }) },
       // 查询按钮
-      search(){
+      search () {
         if (/[0-9]/.test(this.formInline.str)) {
-          this.$api.api_req('museum-api/relic/resources', 'POST', {pageNum: 1, pageSize: 5, relicId: this.formInline.str}, this.getInitDataSuc, this.failure)
+          post('museum-api/relic/resources', { pageNum: 1, pageSize: 5, relicId: this.formInline.str })
+            .then(data => {this.getInitDataSuc(data)})
           this.$message.info('查询成功')
         } else {
-          this.$api.api_req('museum-api/relic/resources', 'POST', {pageNum: 1, pageSize: 5, name: this.formInline.str}, this.getInitDataSuc, this.failure)
+          post('museum-api/relic/resources', { pageNum: 1, pageSize: 5, name: this.formInline.str })
+            .then(data => {this.getInitDataSuc(data)})
           this.$message.info('查询成功')
         }
       },
       // 编辑按钮
-      edit(row){
-        this.$router.push({path: '/edit/exhibit/edit' + '?id=' + row.id})
-      },
+      edit (row) { this.$router.push({ path: '/edit/relic/edit' + '?id=' + row.id }) },
       // 删除按钮
-      deleteItem(row){
-        this.$confirm('删除该件藏品?', '确认', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$api.api_req('museum-api/relic/management/id/' + row.id, 'DELETE', {}, this.deleteSuc, this.failure)
-          this.$message({type: 'success', message: '删除成功!'})
-        }).catch(() => {
-          this.$message({type: 'info', message: '已取消'})
-        })
+      deleteRelic (row) {
+        this.$confirm('删除该件藏品?', '确认', { type: 'warning' })
+            .then(() => {
+              deleteItem('relic/delete', { id: row.id })
+                .then(() => { this.$message.success('删除成功!') })
+                .then(() => { this.refresh() })
+            })
+            .catch(() => { this.$message.info('删除失败') })
       },
-      deleteSuc(_data){
-        this.$api.api_req('museum-api/relic/resources', 'POST', {pageNum: 1, pageSize: 5}, _data => { this.formData = _data.data }, this.failure)
+      deleteSuc () {
+        this.$api.api_req('museum-api/relic/resources', 'POST', { pageNum: 1, pageSize: 5 }, _data => { this.formData = _data.data }, this.failure)
       },
       // filters 里没有this对象 所以用method
-      getType(index){
-        return _.find(this.relicTypes, ['id', index]).relicType
-      },
+      getType (index) { return this.$store.state.relicTypes.relicTypes.find(x => x.id === index) },
       // 分页-选择页数
-      choicePage(val) {
-        this.$api.api_req('museum-api/relic/resources', 'POST', {pageNum: val, pageSize: 5}, _data => { this.formData = _data.data }, this.failure)
+      choicePage (val) {
+        this.$api.api_req('museum-api/relic/resources', 'POST', { pageNum: val, pageSize: 5 }, _data => { this.formData = _data.data }, this.failure)
       },
       // 格式化时间
-      dateFormat(row, column){
-        console.log()
+      dateFormat (row, column) {
         return new Date(row[column.property]).toLocaleString()
       },
-      hasAuth(index){
+      hasAuth (index) {
         return this.authList.indexOf(index) !== -1
       },
-      failure(_err){
-        console.log('交互失败')
-        console.log(_err)
-      },
-      logicErr(_err){
+      logicErr (_err) {
         this.$message.error(_err)
       }
     }
@@ -213,43 +203,46 @@
 </script>
 
 <style lang='stylus'>
-  // r_私有样式
   .cover-img
     width: 100px
 
-  // 添加按钮
   .r-oneline
     margin-bottom: 20px
+
     .add-btn
       float left
+
     .search-form
       float right
       margin-bottom: 0
+
       .el-form-item
         margin-bottom 0
+
     &::after
       content: ''
       display: block
       clear: both
 
-  // table 修正
   .r-table
     table
       tr
         form
           .el-form-item
             width: 50%
+
         td
           &:last-child
             border-right: 0
 
-  // 展开 样式测试
   .r-table-expand {
     font-size: 0;
+
     label {
       width: 90px;
       color: #99a9bf;
     }
+
     .el-form-item {
       margin-right: 0;
       margin-bottom: 0;

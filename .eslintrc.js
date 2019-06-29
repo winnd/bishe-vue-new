@@ -30,6 +30,8 @@ module.exports = {
     'no-undef': 0,
     'key-spacing':0,
     'no-multi-spaces':0,
-    'block-spacing':0
+    'block-spacing':0,
+    'no-trailing-spaces':0,
+    'new-cap':0
   }
 }

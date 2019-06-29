@@ -7,7 +7,7 @@
           <p>请输入用户名密码</p>
           <el-form-item prop="account">
             <el-input placeholder="用户名"
-                      suffix-icon="el-icon-user"
+                      suffix-icon="el-icon-routerManage"
                       :rules="{ required: true, trigger: 'blur', message: '请输入用户名' }"
                       v-model="loginForm.account"></el-input>
           </el-form-item>

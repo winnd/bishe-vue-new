@@ -1,6 +1,6 @@
 <template>
   <div class="view-wrapper">
-    <div id="MyViewerDiv"></div>
+    <div id="MyViewerDiv">asdfasdf</div>
   </div>
 </template>
 
@@ -9,6 +9,7 @@
   const URN = 'urn:' + localStorage.getItem('transformedUrn')
   export default {
     created(){
+      debugger
       console.log(URN)
       Autodesk.Viewing.Initializer(this.options, () => {
         Autodesk.Viewing.Document.load(URN, this.onDocumentLoadSuccess, this.onDocumentLoadFailure)
@@ -64,10 +65,6 @@
     display: flex;
     height: 100%;
     width: 100%;
-  }
-
-  .view-box {
-    flex: 1;
   }
 
   #MyViewerDiv {

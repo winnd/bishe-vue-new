@@ -1,5 +1,5 @@
 <template>
-  <div class="exhibitType-board-wrapper">
+  <div class="relicType-board-wrapper">
     <div class="r-oneline">
       <el-button @click="flag.addFlag = true" v-if="hasAuth(4)">新增类别</el-button>
       <el-form :inline="true" :model="formInline" class="search-form">
@@ -14,7 +14,7 @@
 
     <el-table border :data="typeData" style="width: 100%;">
       <el-table-column type='index' width='50'></el-table-column>
-      <el-table-column property="relicType" label="藏品类别"></el-table-column>
+      <el-table-column property="relicTypes" label="藏品类别"></el-table-column>
       <el-table-column property="id" label="类别id"></el-table-column>
       <el-table-column property="updateTime" :formatter="dateFormat" label="更新时间"></el-table-column>
       <template v-if="hasAuth(4)||hasAuth(5)">
@@ -42,7 +42,7 @@
             action="/museum-api/file/management"
             :headers=uploadHeader
             :on-success="addBg">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" alt="">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
@@ -69,7 +69,7 @@
             action="/museum-api/file/management"
             :headers=uploadHeader
             :on-success="editBg">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" alt="">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
@@ -87,9 +87,9 @@
 <script>
   export default {
     created(){
-      this.$api.api_req('relicType/select/all', 'GET', {}, (_data) => { this.typeData = _data.data }, this.failure)
+      this.$api.api_req('relicType/select/allRelicType', 'GET', {}, (_data) => { this.typeData = _data.data }, this.failure)
       // 获取权限列表
-      this.$api.api_req('museum-api/user/user-auth/id/' + localStorage.getItem('userId'), 'GET', {}, this.getInitAuthList, this.failure, this.logicErr)
+      this.$api.api_req('museum-api/routerManage/routerManage-auth/id/' + localStorage.getItem('userId'), 'GET', {}, this.getInitAuthList, this.failure, this.logicErr)
     },
     data(){
       return {
@@ -133,7 +133,7 @@
             this.$message({type: 'success', message: '删除成功!'})
           }).catch(() => { this.$message({type: 'info', message: '已取消'}) })
       },
-      deleteSuc(_data){
+      deleteSuc(){
         this.$api.api_req('museum-api/relic-type/resources', 'GET', {}, (_data) => { this.typeData = _data.data }, this.failure)
       },
       addSubmit(){

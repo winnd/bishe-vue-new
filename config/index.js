@@ -28,14 +28,23 @@ module.exports = {
     env               : require('./dev.env'),
     port              : process.env.PORT || 8082,
     autoOpenBrowser   : true,
-    assetsSubDirectory: 'static', // r_原来是 static
-    assetsPublicPath  : '/',     // r_原来是 /
+    assetsSubDirectory: 'static',
+    assetsPublicPath  : '/',
     // proxyTable: {}, // 这是原来的
     proxyTable        : {
+      '/forge_api'      : {
+        target      : 'https://developer.api.autodesk.com',
+        changeOrigin: true,
+        pathRewrite : {
+          '^/forge_api': '^/'
+        }
+      },
       '/authentication' : {    // 获取身份
         target      : 'https://developer.api.autodesk.com',
         changeOrigin: true,
-        pathRewrite : {}
+        pathRewrite : {
+          '^/authentication': '/authentication'
+        }
       },
       '/oss'            : {
         target      : 'https://developer.api.autodesk.com',

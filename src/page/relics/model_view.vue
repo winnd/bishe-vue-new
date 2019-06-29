@@ -1,6 +1,6 @@
 <template>
   <div class="view-wrapper">
-    <div id="MyViewerDiv"></div>
+    <div id="MyViewerDiv">asdfasdfasdf</div>
   </div>
 </template>
 
@@ -17,6 +17,14 @@
         this.getTokenSuc, this.failure)
 
       this.urn = 'urn:' + this.$route.query.transformedUrn
+
+//      curl
+//      -v 'https://developer.api.autodesk.com/authentication/v1/authenticate'
+//      -X 'POST'
+//      -H 'Content-Type: application/x-www-form-urlencoded'
+//      -d 'client_id=<your-Client ID>&' +
+//      'client_secret=<your-Client Secret>&' +
+//      'grant_type=client_credentials&scope=data:read data:write bucket:create bucket:read'
     },
     data(){
       return {
@@ -79,10 +87,6 @@
     display: flex;
     height: 100%;
     width: 100%;
-  }
-
-  .view-box {
-    flex: 1;
   }
 
   #MyViewerDiv {

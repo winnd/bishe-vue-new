@@ -1,7 +1,7 @@
 <template>
-  <div class="manage-add-wrapper">
+  <div class="user-add-wrapper">
 
-    <el-form :model="userForm" :rules="rules" ref="userForm" label-width="100px" class="manage-add-form">
+    <el-form :model="userForm" :rules="rules" ref="userForm" label-width="100px" class="user-add-form">
 
       <div class="base-set">
         <div class="line-title">基本设置</div>
@@ -44,7 +44,7 @@
   export default {
     created(){
       // 获取全部权限列表
-      this.$api.api_req('museum-api/user/auth-menu', 'GET', {}, this.initAuthLists, this.failure)
+      this.$api.api_req('museum-api/routerManage/auth-menu', 'GET', {}, this.initAuthLists, this.failure)
     },
     data(){
       // 密码验证
@@ -102,8 +102,8 @@
     methods: {
       // 初始化权限列表和权限索引列表
       initAuthLists(data){
-        data.data.menus.map((item, index) => {
-          item.functions.map((item, index) => {
+        data.data.menus.map((item) => {
+          item.functions.map((item) => {
             this.rightName.push(item.functionName)      // 全部权限 名称
             this.rights.push(item)                      // 全部权限 索引
           })
@@ -124,7 +124,7 @@
       submitForm(formName){
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$api.api_req('museum-api/user/register', 'POST', _.pick(this.userForm, ['account', 'name', 'password']), this.submitFormSuc, this.failure)
+            this.$api.api_req('museum-api/routerManage/register', 'POST', _.pick(this.userForm, ['account', 'name', 'password']), this.submitFormSuc, this.failure)
           } else {
             this.$message.error({message: '请检查填写信息是否完整'})
             return false
@@ -135,16 +135,16 @@
       submitFormSuc(data){
         // 拿到选中的权限索引 权限转索引
         this.rightIndex = []
-        this.checkedRight.map((item, index) => {
+        this.checkedRight.map((item) => {
           this.rightIndex.push(parseInt(_.find(this.rights, ['functionName', item]).id))
         })
         console.log(Array.from(this.rightIndex))
-        this.$api.api_req('museum-api/user/user-auth', 'POST', {userId: data.data.id, authList: this.rightIndex}, this.registSuc, this.failure)
+        this.$api.api_req('museum-api/routerManage/routerManage-auth', 'POST', {userId: data.data.id, authList: this.rightIndex}, this.registSuc, this.failure)
       },
       registSuc(data){
         console.log(data)
         this.$message({type: 'success', message: '注册成功'})
-        this.$router.push({path: '/edit/manage/board'})
+        this.$router.push({path: '/edit/user/board'})
       },
       // 重置
       resetForm(formName) {
@@ -160,7 +160,7 @@
 </script>
 
 <style lang="stylus">
-  .manage-add-wrapper
+  .user-add-wrapper
     width: 600px
   //标题
     .line-title
@@ -170,14 +170,14 @@
       border-left 5px solid #409eff
       margin: 20px 0 20px 0
       padding-left: 10px
-    .manage-add-form
+    .user-add-form
       .base-set
         width: 400px
-      .manage-right-box
-        margin-left 50px
-        margin-bottom: 20px
-        .el-checkbox-group
-          padding: 10px 0
+      /*.manage-right-box*/
+        /*margin-left 50px*/
+        /*margin-bottom: 20px*/
+        /*.el-checkbox-group*/
+          /*padding: 10px 0*/
       .el-input__inner
         width: 300px
     .el-form-item
