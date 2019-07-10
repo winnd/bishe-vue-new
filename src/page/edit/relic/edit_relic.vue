@@ -145,7 +145,8 @@
       <!--上传其他图片-->
       <p class="upload-txt">上传其他展示图片</p>
       <el-upload class="uploader-box"
-                 name="uploadImgList" list-type="picture-card"
+                 name="uploadImgList"
+                 list-type="picture-card"
                  action="111"
                  :auto-upload="false"
                  :on-preview="onImgListPreview"
@@ -200,7 +201,7 @@
 
   //  const ACCOUNT_ID      = '564fIM6TfltXLD7AN1AQCOhT9V2GZBGe'
   //  const ACCOUNT_SECRECT = 'cepTLQSlLyDmz3i1'
-  const BUCKET_KEY = 'mbucket1'
+  //  const BUCKET_KEY = 'mbucket1'
 
   export default {
     computed: {
@@ -282,38 +283,46 @@
           ]
         },
         previewVisiable: false,
-        imgList        : [],                                    // {id: 0, tempId: 0}   // id是服务器返回的图片id tempId 是本地上传成功的id
+        imgList        : [],                                    // imgList是要上传的内容
+        previewImgList : [],                                    // previewImgList是从服务器拉下来初始化的时候显示的
+        deleteImgList  : [],
         coverLocalUrl  : '',                                         // element ui 自带的
-        coverImg       : '',
+        coverImgFile   : '',
         previewImgUrl  : '',
         modelFile      : ''
       }
     },
     methods : {
-      // 保存token
-      getTokenSuc (data) {
-        localStorage.setItem('activeToken', data.data.access_token)
+      // 获取藏品成功时的回调
+      getRelicSuc (data) {
+        debugger
+        this.ruleForm      = data.data
+        this.previewImgUrl = this.ruleForm.picUrl ? this.$HOST + this.ruleForm.picUrl : '' // 封面 (ele组件本地图片的显示)
+        this.imgList       = this.ruleForm.relicImages
+        this.coverLocalUrl = this.ruleForm.picUrl
       },
       // 上传封面
       onCoverChange (file) {
         this.coverLocalUrl = URL.createObjectURL(file.raw)
-        this.coverImg      = file
+        this.coverImgFile  = file
       },
+//      // 保存token
+//      getTokenSuc (data) {
+//        localStorage.setItem('activeToken', data.data.access_token)
+//      },
       // 删除封面
-      onCoverRemove () { this.coverImg = '' },
-      // 获取藏品成功时的回调
-      getRelicSuc (_data) {
-        this.ruleForm      = _data.data
-        this.previewImgUrl = this.ruleForm.picUrl ? this.$HOST + this.ruleForm.picUrl : '' // 封面 (ele组件本地图片的显示)
-        this.coverImg      = this.ruleForm.picUrl        // 封面 url
-        this.imgList       = this.ruleForm.relicImages
-      },
+      onCoverRemove () { this.coverImgFile = '' },
       // 上传图片相册
       onImgListChange (file, files) {
-        this.imgList = files.map(x => x.raw)
+        debugger
+//        this.imgList       = files.filter(x => !x.raw)                  // 这是新增的时候上传的
+        let newUploadFiles = files.filter(x => x.raw).map(x => x.raw)   // 这是现在新上传的
+        newUploadFiles.map(x => this.imgList.push(x))                   // 组合起来
       },
       // 删除相册
       onImgListRemove (file, files) {
+        debugger
+        this.deleteImgList.push()
         this.imgList = files
       },
       // 预览相册
@@ -321,43 +330,43 @@
         this.previewImgUrl   = file.url
         this.previewVisiable = true
       },
-      // 上传模型到本地
-      getFile (event) {
-        this.modelFile    = event.target.files[0]
-        this.ruleForm.urn = event.target.files[0].name
-        console.log(this.modelFile)
-        this.submitFile()
-      },
+//      // 上传模型到本地
+//      getFile (event) {
+//        this.modelFile    = event.target.files[0]
+//        this.ruleForm.urn = event.target.files[0].name
+//        console.log(this.modelFile)
+//        this.submitFile()
+//      },
       // 提交模型
-      submitFile () {
-        this.$message.info('开始上传模型')
-        console.log('上传文件')
-        this.$api.api_forge('oss/v2/buckets/' + BUCKET_KEY + '/objects/' + this.modelFile.name, 'PUT',
-          { 'Content-Type': 'application/octet-stream', 'Authorization': 'Bearer ' + localStorage.getItem('activeToken') }, // headers
-          this.modelFile,             // 参数
-          this.submitFileSuc, this.failure
-        )
-      },
-      submitFileSuc (data) {
-        this.$message.success('模型上传成功')
-        console.log('模型上传成功')
-        this.transformFile(data.data.objectId)
-      },
+//      submitFile () {
+//        this.$message.info('开始上传模型')
+//        console.log('上传文件')
+//        this.$api.api_forge('oss/v2/buckets/' + BUCKET_KEY + '/objects/' + this.modelFile.name, 'PUT',
+//          { 'Content-Type': 'application/octet-stream', 'Authorization': 'Bearer ' + localStorage.getItem('activeToken') }, // headers
+//          this.modelFile,             // 参数
+//          this.submitFileSuc, this.failure
+//        )
+//      },
+//      submitFileSuc (data) {
+//        this.$message.success('模型上传成功')
+//        console.log('模型上传成功')
+//        this.transformFile(data.data.objectId)
+//      },
       // 转换模型
-      transformFile (urn) {
-        this.$api.api_forge('modelderivative/v2/designdata/job', 'POST',
-          { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('activeToken') }, // headers
-          { 'input': { 'urn': btoa(urn) }, 'output': { 'formats': [{ 'type': 'svf', 'views': ['2d', '3d'] }] } },          // 参数
-          this.transformFileSuc, this.failure
-        )
-      },
-      transformFileSuc (data) {
-        localStorage.setItem('transformedUrn', data.data.urn)
-        this.ruleForm.transformedUrn = data.data.urn
-        console.log(data.data)
-        console.log('模型转换成功')
-        this.$message.success('模型转换完成 请点击预览')
-      },
+//      transformFile (urn) {
+//        this.$api.api_forge('modelderivative/v2/designdata/job', 'POST',
+//          { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('activeToken') }, // headers
+//          { 'input': { 'urn': btoa(urn) }, 'output': { 'formats': [{ 'type': 'svf', 'views': ['2d', '3d'] }] } },          // 参数
+//          this.transformFileSuc, this.failure
+//        )
+//      },
+//      transformFileSuc (data) {
+//        localStorage.setItem('transformedUrn', data.data.urn)
+//        this.ruleForm.transformedUrn = data.data.urn
+//        console.log(data.data)
+//        console.log('模型转换成功')
+//        this.$message.success('模型转换完成 请点击预览')
+//      },
       /* 提交 */
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
@@ -365,7 +374,7 @@
 
           this.formData.append('formData', new Blob([JSON.stringify(this.ruleForm)], { type: 'application/json' }))
 
-          this.coverImg !== 'undefined' && this.formData.append('coverImg', this.coverImg.raw)
+          this.coverImgFile !== 'undefined' && this.formData.append('coverImg', this.coverImgFile.raw)
 
           this.imgList.map(x => { this.formData.append('imgList', x) })
 

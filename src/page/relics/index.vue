@@ -93,7 +93,7 @@
 
   export default {
     created () {
-      get({ url: 'relicType/select/allRelicType' })      // 查询藏品分类
+      get('relicType/select/allRelicType')      // 查询藏品分类
         .then(data => {this.relicTypeList = data.data.reverse()})
         .catch(err => {this.failure(err)})
 

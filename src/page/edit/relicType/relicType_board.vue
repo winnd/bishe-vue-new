@@ -85,15 +85,19 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
+
   export default {
+    computed: {
+      ...mapGetters(['relicTypes'])
+    },
     created(){
-      this.$api.api_req('relicType/select/allRelicType', 'GET', {}, (_data) => { this.typeData = _data.data }, this.failure)
       // 获取权限列表
-      this.$api.api_req('museum-api/routerManage/routerManage-auth/id/' + localStorage.getItem('userId'), 'GET', {}, this.getInitAuthList, this.failure, this.logicErr)
+//      this.$api.api_req('museum-api/routerManage/routerManage-auth/id/' + localStorage.getItem('userId'), 'GET', {}, this.getInitAuthList, this.failure, this.logicErr)
     },
     data(){
       return {
-        typeData: [],
+        relicTypes: [],
         authList: [],                   // 用户权限信息
         formInline: {
           user: ''

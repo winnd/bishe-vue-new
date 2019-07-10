@@ -18,7 +18,7 @@
 
           <el-form label-position='left' inline class='r-table-expand'>
             <el-form-item :style="{width:'100%'}">
-              <img :src="$HOST+'image/'+props.row.picUrl" class="cover-img" alt="">
+              <img :src="props.row.picUrl" class="cover-img" alt="">
             </el-form-item>
             <el-form-item label='藏品名称'>
               <span>{{ props.row.name }}</span>
@@ -82,7 +82,7 @@
             </el-form-item>
             <el-form-item label='展示图片' :style="{'width':'100%'}">
               <template v-for="(item) in props.row.relicImages">
-                <img :src="$HOST+'image/'+item.url" class="cover-img pdt-14px pdr-5px" alt="" />
+                <img :src="item.url" class="cover-img pdt-14px pdr-5px" alt="" />
               </template>
             </el-form-item>
           </el-form>
@@ -107,8 +107,10 @@
       <el-pagination
         :style="{'float':'right'}"
         @current-change="choicePage"
-        :current-page="1"
-        :page-size="5"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        :prev-click="currentPage-1"
+        :next-click="currentPage+1"
         layout="total,prev, pager, next, jumper"
         :total=this.totalData>
       </el-pagination>
@@ -123,46 +125,45 @@
   export default {
     inject : ['refresh'],
     created () {
-      get('relic/select/allRelic', { pageNum: 1, pageSize: 5 })
-        .then(data => {
-          this.getInitDataSuc(data)
-        })
-
-      // 获取权限列表
-//      this.$api.api_req('museum-api/routerManage/routerManage-auth/id/' + localStorage.getItem('userId'), 'GET', {}, this.getInitAuthList, this.failure, this.logicErr)
+      this._getRelicData(this.currentPage, this.pageSize)     // 获取数据 第 1 页, 10条
     },
     data () {
       return {
-        formData  : [],
-        authList  : [],       // 用户权限信息
-        totalData : 0,
-        formInline: {
+        formData   : [],
+        authList   : [],       // 用户权限信息
+        totalData  : 0,
+        formInline : {
           str: ''
-        }
+        },
+        currentPage: 1,
+        pageSize   : 10
       }
     },
     methods: {
+      _getRelicData (pageNum, pageSize) {
+        return get('relic/select/allRelic', { pageNum, pageSize })
+          .then(data => { this.getInitDataSuc(data) })
+      },
+      getInitDataSuc (data) {
+        this.formData  = data.data.list
+        this.totalData = data.data.total        // todo 页数
+      },
       getInitAuthList (data) {
-        debugger
         this.authList = []
         data.data.map(x => {
           this.authList.push(x.funcId)
         })
         console.log(this.authList)
       },
-      getInitDataSuc (data) {
-        this.formData = data.data
-//        this.totalData = _data.page.totalNum        // todo 页数
-      },
       addNew () { this.$router.push({ path: '/edit/relic/add' }) },
-      // 查询按钮
+      // 查询按钮 todo
       search () {
         if (/[0-9]/.test(this.formInline.str)) {
-          post('museum-api/relic/resources', { pageNum: 1, pageSize: 5, relicId: this.formInline.str })
+          post('museum-api/relic/resources', { pageNum: 1, pageSize: 10, relicId: this.formInline.str })
             .then(data => {this.getInitDataSuc(data)})
           this.$message.info('查询成功')
         } else {
-          post('museum-api/relic/resources', { pageNum: 1, pageSize: 5, name: this.formInline.str })
+          post('museum-api/relic/resources', { pageNum: 1, pageSize: 10, name: this.formInline.str })
             .then(data => {this.getInitDataSuc(data)})
           this.$message.info('查询成功')
         }
@@ -185,8 +186,8 @@
       // filters 里没有this对象 所以用method
       getType (index) { return this.$store.state.relicTypes.relicTypes.find(x => x.id === index) },
       // 分页-选择页数
-      choicePage (val) {
-        this.$api.api_req('museum-api/relic/resources', 'POST', { pageNum: val, pageSize: 5 }, _data => { this.formData = _data.data }, this.failure)
+      choicePage (val, a, b) {
+        this._getRelicData(val, this.pageSize)
       },
       // 格式化时间
       dateFormat (row, column) {
