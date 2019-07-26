@@ -4,7 +4,7 @@ import store from '../store'
 import { hadLogin } from '../units/auth'
 import router from './router.js'
 
-const whiteList = ['/login', '/404']
+const whiteList = ['/login', '/404', '/']
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
