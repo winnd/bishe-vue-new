@@ -52,10 +52,10 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: config.build.index,   // 生成html文件的名字，路径和生产环境下的不同，要与修改后的publickPath相结合，否则开启服务器后页面空白
+      filename: config.build.index,   // 生成html文件的名字，路径和生产环境下的不同，要与修改后的public kPath相结合，否则开启服务器后页面空白
       template: 'index.html',
       inject: true,
-      minify: {
+      minify: {                       // 压缩配置
         removeComments: true,
         collapseWhitespace: true,
         removeAttributeQuotes: true
@@ -63,7 +63,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency'
+      chunksSortMode: 'dependency'    // r_ 多模块时按dependency顺序引入
     }),
     // keep module.id stable when vender modules does not change
     new webpack.HashedModuleIdsPlugin(),
@@ -88,7 +88,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       chunks: ['vendor']
     }),
     // copy custom static assets
-    new CopyWebpackPlugin([
+    new CopyWebpackPlugin([       // r_ 复制静态资源到指定文件夹
       {
         from: path.resolve(__dirname, '../static'),
         to: config.build.assetsSubDirectory,
@@ -98,7 +98,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   ]
 })
 
-if (config.build.productionGzip) {
+if (config.build.productionGzip) {    // 配置文件开启gzip压缩
   const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
   webpackConfig.plugins.push(
