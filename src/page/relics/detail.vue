@@ -203,7 +203,7 @@
         background-size 100% 100%
         width: 68px;
         height: 68px;
-        opacity: 0.6
+        opacity: .6
 
       .el-carousel__indicator
         &.is-active
@@ -319,7 +319,7 @@
           left: 0;
           right: 0;
           background #000
-          opacity: 0.4
+          opacity: .4
           z-index: -5
 
         a
@@ -420,7 +420,7 @@
     .footer
       flex: 0 100px
       width: 100%
-      background: 1px solid yellow
+      background: 1px solid #ff0
 
       .album-container
         display: flex
@@ -439,7 +439,7 @@
             justify-content flex-start
             align-items center
             flex-flow: row
-            border 1px solid chartreuse
+            border 1px solid #7fff00
 
             li.img-item
               width: 68px;
@@ -458,7 +458,7 @@
 
         .slider-btn
           flex: 0 50px
-          board: 1px solid green
+          board: 1px solid #008000
 
   // 下拉菜单
   .el-dropdown-menu

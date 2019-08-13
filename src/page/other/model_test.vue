@@ -19,7 +19,7 @@
     <button @click="delectObjec">删除Object</button>
     <br><br>
 
-    <form action="" style="background: lime">
+    <form action="" style="background: #00ff00">
       <input type="file" @change="getFile($event)"><!--@change="mUpload($event)"-->
       <button type="submit" @click="submitFile($event)">提交</button>
     </form>
@@ -33,8 +33,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
-
   // 需要存到后台
   const ACCOUNT_ID = '564fIM6TfltXLD7AN1AQCOhT9V2GZBGe'
   const ACCOUNT_SECRECT = 'cepTLQSlLyDmz3i1'
@@ -238,7 +236,7 @@
       checkTransformSuc(data){
         console.log(data.data)
       },
-      failure(err, a, b){
+      failure(err){
         console.log(err)
       }
     }

@@ -401,13 +401,13 @@
     color: #2d2f33;
     border-radius: 4px;
 
-    .line-title
-      color: #1f2f3d;
-      font-size: 22px;
-      font-weight: 400;
-      border-left 5px solid #409eff
-      margin: 20px 0 20px 0
-      padding-left: 10px
+  .line-title
+    color: #1f2f3d;
+    font-size: 22px;
+    font-weight: 400;
+    border-left 5px solid #409eff
+    margin: 20px 0 20px 0
+    padding-left: 10px
 
   .r-star-box
     display inline-block
@@ -425,12 +425,12 @@
 
   .uploader-box
     border-radius: 3px;
-    border: 1px solid rgb(235, 235, 235);
+    border: 1px solid #EBEBEB;
     padding: 24px;
     margin: 0 0 14px 14px;
 
     &:hover
-      box-shadow: rgba(232, 237, 250, 0.6) 0px 0px 8px 0px, rgba(232, 237, 250, 0.5) 0px 2px 4px 0px;
+      box-shadow: rgba(232, 237, 250, 0.6) 0 0 8px 0, rgba(232, 237, 250, .5) 0 2px 4px 0;
 
     .el-upload
       border: 1px dashed #d9d9d9;

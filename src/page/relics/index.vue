@@ -243,7 +243,7 @@
           left: 0;
           right: 0;
           /*background #fff*/
-          opacity: 0.1
+          opacity: .1
 
         a
           display inline-block
@@ -270,7 +270,7 @@
           position: absolute
           bottom: 0
           left: 0
-          border-bottom: 5px solid rgb(48, 76, 123)
+          border-bottom: 5px solid #EBEBEB
           width: 150px
           color: #fff
 
@@ -383,13 +383,13 @@
                 background-color #333
                 background-repeat no-repeat
                 background-size 110%
-                opacity 0.8
+                opacity .8
                 filter blur(6px)
                 transform: scale(1.25)
 
               .el-carousel__container
                 height 100%
-                background green
+                background #008000
                 overflow: hidden
 
               .el-carousel__item
